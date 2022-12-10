@@ -69,10 +69,10 @@ function LoadSellPlace()
 				sleepThread = 5
 
 				if dstCheck <= 4.2 then
-					ESX.Game.Utils.DrawText3D(SellPos, "[E] Open Menu", 0.4)
-					if IsControlJustPressed(0, 38) then
-						if IsPedInAnyVehicle(ped, false) then
-							OpenSellMenu(GetVehiclePedIsUsing(ped))
+					ESX.Game.Utils.DrawText3D(SellPos, "[E] Ava menüü", 0.4)
+					if IsControlJustPressed(0, 38) and if ESX.PlayerData.job.name == 'Haes Autos' and PlayerData.job.grade_name == 'auto2')
+					if IsPedInAnyVehicle(ped, false) then
+						OpenSellMenu(GetVehiclePedIsUsing(ped))
 						else
 							ESX.ShowNotification("You must sit in a ~g~vehicle")
 						end
