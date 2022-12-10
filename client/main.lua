@@ -1,3 +1,6 @@
+-- TÄNU TUPSULE!
+
+
 ESX = nil
 
 PlayerData = {}
@@ -12,16 +15,40 @@ Citizen.CreateThread(function()
     end
 
     if ESX.IsPlayerLoaded() then
-		PlayerData = ESX.GetPlayerData()
+        PlayerData = ESX.GetPlayerData()
 
-		RemoveVehicles()
+        RemoveVehicles()
 
-		Citizen.Wait(500)
+        Citizen.Wait(500)
 
-		LoadSellPlace()
+        LoadSellPlace()
 
-		SpawnVehicles()
+        SpawnVehicles()
     end
+end)
+
+
+Citizen.CreateThread(function()
+
+    while ESX.GetPlayerData().job == nil do
+        Citizen.Wait(10)
+    end
+
+    ESX.PlayerData = ESX.GetPlayerData()
+end)
+
+RegisterNetEvent("esx:playerLoaded")
+AddEventHandler("esx:playerLoaded", function(response)
+    PlayerData = response
+
+    LoadSellPlace()
+
+    SpawnVehicles()
+end)
+
+
+RegisterNetEvent('esx:setJob', function(job)
+    ESX.PlayerData.job = job
 end)
 
 RegisterNetEvent("esx:playerLoaded")
@@ -43,7 +70,7 @@ AddEventHandler("esx-qalle-sellvehicles:refreshVehicles", function()
 end)
 
 function LoadSellPlace()
-	Citizen.CreateThread(function()
+	Citizen.CreateThread function()
 
 		local SellPos = Config.SellPosition
 
@@ -69,12 +96,12 @@ function LoadSellPlace()
 				sleepThread = 5
 
 				if dstCheck <= 4.2 then
-					ESX.Game.Utils.DrawText3D(SellPos, "[E] Ava menüü", 0.4)
-					if IsControlJustPressed(0, 38) and if ESX.PlayerData.job.name == 'Haes Autos' and PlayerData.job.grade_name == 'auto2')
+					ESX.Game.Utils.DrawText3D(SellPos, "[E] Ava menüü", 0.6)
+					if IsControlJustPressed(0, 38) and ESX.PlayerData.job and ESX.PlayerData.job.name == 'haes' then
 					if IsPedInAnyVehicle(ped, false) then
 						OpenSellMenu(GetVehiclePedIsUsing(ped))
 						else
-							ESX.ShowNotification("You must sit in a ~g~vehicle")
+							ESX.ShowNotification("Auto müüki panemiseks peate asetsema sõiduki juhiistmel ~g~vehicle~s~!")
 						end
 					end
 				end
@@ -90,13 +117,13 @@ function LoadSellPlace()
 					if dstCheck <= 2.0 then
 						sleepThread = 5
 
-						ESX.Game.Utils.DrawText3D(vehCoords, "[E] " .. Config.VehiclePositions[i]["price"] .. ":-", 0.4)
+						ESX.Game.Utils.DrawText3D(vehCoords, "[E] AVA MENÜÜ" .. Config.VehiclePositions[i]["price"] .. ":-", 0.4)
 
 						if IsControlJustPressed(0, 38) then
 							if IsPedInVehicle(ped, Config.VehiclePositions[i]["entityId"], false) then
 								OpenSellMenu(Config.VehiclePositions[i]["entityId"], Config.VehiclePositions[i]["price"], true, Config.VehiclePositions[i]["owner"])
 							else
-								ESX.ShowNotification("You must sit in the ~g~vehicle~s~!")
+								ESX.ShowNotification("Auto müüki panemiseks peate asetsema sõiduki juhiistmel ~g~vehicle~s~!")
 							end
 						end
 					end
@@ -105,7 +132,7 @@ function LoadSellPlace()
 
 			Citizen.Wait(sleepThread)
 		end
-	end)
+	end
 end
 
 function OpenSellMenu(veh, price, buyVehicle, owner)
@@ -113,7 +140,7 @@ function OpenSellMenu(veh, price, buyVehicle, owner)
 
 	if not buyVehicle then
 		if price ~= nil then
-			table.insert(elements, { ["label"] = "Change Price - " .. price .. " :-", ["value"] = "price" })
+			table.insert(elements, { ["label"] = "Muuda hinnaks - " .. price .. " :-", ["value"] = "price" })
 			table.insert(elements, { ["label"] = "Put out for sale", ["value"] = "sell" })
 		else
 			table.insert(elements, { ["label"] = "Set Price - :-", ["value"] = "price" })
@@ -234,3 +261,24 @@ LoadModel = function(model)
 		Citizen.Wait(1)
 	end
 end
+
+Citizen.CreateThread function()
+	while true do
+		Citizen.Wait(0)
+
+		if CurrentAction then
+			ESX.ShowHelpNotification(CurrentActionMsg)
+
+			if IsControlJustReleased(0, 38) and ESX.PlayerData.job and ESX.PlayerData.job.name == 'haes' then
+
+				if CurrentAction == 'mechanic_actions_menu' then
+					OpenMechanicActionsMenu()
+				elseif CurrentAction == 'mechanic_harvest_menu' then
+					OpenMechanicHarvestMenu()
+				elseif CurrentAction == 'mechanic_craft_menu' then
+					OpenMechanicCraftMenu()
+				elseif CurrentAction == 'delete_vehicle' then
+
+	    if IsControlJustReleased(0, 167) and not isDead and ESX.PlayerData.job and ESX.PlayerData.job.name == 'haes' then
+				OpenMobileMechanicActionsMenu()
+		end
